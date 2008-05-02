@@ -3,7 +3,7 @@
 Plugin Name: Comment connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.1
+Version: 1.2
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
@@ -40,17 +40,10 @@ if ($blank > 0)
 	if ($count > 0) {
 
 	//find the post ID without printing to screen
-	ob_start();
-	the_ID();
-	$pid = ob_get_contents();
-	ob_end_clean();
+	$pid = get_the_ID();
 
 	//find the comment ID without printing to screen
-	ob_start();
-	comment_ID();
-	$cid = ob_get_contents();
-	ob_end_clean();
-
+	$cid = get_comment_ID();
 
 	//find the author of the comment to reference
 	$string = get_string_between($comment, '@', '<br />', 0);
