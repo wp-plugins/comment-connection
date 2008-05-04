@@ -3,7 +3,7 @@
 Plugin Name: Comment connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.2
+Version: 1.3
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
@@ -21,7 +21,7 @@ or by writing to the Free Software Foundation, Inc.,
 */
 
 //plugin function
-function bold_comment($comment) {
+function comment_connection($comment) {
 global $wpdb;
 
 //replace new lines \n with line breaks <br /> in order to detect comment reference
@@ -37,6 +37,7 @@ if ($blank > 0)
 
 	//determine if someone is referencing a comment
 	$count = substr_count($comment, "@");
+
 	if ($count > 0) {
 
 	//find the post ID without printing to screen
@@ -44,45 +45,30 @@ if ($blank > 0)
 
 	//find the comment ID without printing to screen
 	$cid = get_comment_ID();
-
-	//find the author of the comment to reference
-	$string = get_string_between($comment, '@', '<br />', 0);
-	$colon = get_string_between($comment, '@', ':', 0);
-
-	//by comparing the length of the two elements, only one query is required
-	$string_length = strlen($string);
-	$colon_length = strlen($colon);
-
-	if ($string_length < $colon_length)
-		$author = $string;
-	else if ($string_length > $colon_length)
-		$author = $colon;
-
-	//find the comment id of comment being referenced
-	//query finds last comment submitted by author on this specific post
-	//as well as those that occur before this comment
 	
-	if  (($string_length > 0) && ($colon_length > 0)) {
-		$d = db_query($pid, $cid, $author);
-		
-		//replace the comment with the modified link, but only if a suitable comment is found
-		if ($d != NULL)
-		$comment = str_ireplace($author, '<a href="#comment-' . $d . '">' . $author . '</a>', $comment);
-		}
-	}
+	//this is the big change
+	//determine all occurances of @ and their following authors
+	//then loads into array
+	preg_match_all("/@(.*)(:|\<br \/\>)/", $comment, $out);
 
-     return $comment; //print the modified comments
+	for ($x=0; $x < count($out[1]); $x++) {
+		//solves little problem with colon usage
+		if (substr_count($out[1][$x], ':') > 0) 
+			$out[1][$x] = substr($out[1][$x], 0, strpos($out[1][$x], ':'));
+		//solves other little problem with extra spaces
+		if (substr_count($out[1][$x], ' ') <= 2)
+			$array[$x] = $out[1][$x];
+
+		//retrieve comment info from database
+		$d = db_query($pid, $cid, $array[$x]);
+
+		//replace the authors with their comment IDs
+		if ($d != NULL)
+			$comment = str_ireplace('@' . $array[$x], '@<a href=#comment-' . $d . '>' . $array[$x] . '</a>', $comment);
+	}
 }
 
-//find the comment author to reference
-//obtained from http://php.oregonstate.edu/manual/en/ref.strings.php
-function get_string_between($string, $start, $end, $num){
-    $string = " ".$string;
-     $ini = strpos($string,$start);
-     if ($ini == 0) return "";
-     $ini += strlen($start);     
-     $len = strpos($string,$end,$ini) - $ini+$num;
-     return substr($string,$ini,$len);
+return $comment; //print the modified comments
 }
 
 function db_query($pid, $cid, $string) {
@@ -92,4 +78,4 @@ function db_query($pid, $cid, $string) {
 	return $result;
 }
 
-add_filter('comment_text', 'bold_comment'); //apply before printing comments
+add_filter('comment_text', 'comment_connection'); //apply before printing comments
