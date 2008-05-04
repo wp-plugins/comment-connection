@@ -1,9 +1,9 @@
 === Comment Connection ===
 Contributors: wesg
 Tags: comments,link,reply
-Requires at least: 2.0 or higher
+Requires at least: 2.0
 Tested up to: 2.5
-Stable tag: 1.2
+Stable tag: 1.3
 
 Comment Connection is a Wordpress plugin that automatically links comments as authors reply to each other.
 
