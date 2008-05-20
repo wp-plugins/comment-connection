@@ -3,7 +3,7 @@
 Plugin Name: Comment connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.3
+Version: 1.4
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
