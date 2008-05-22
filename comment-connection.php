@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Comment connection
+Plugin Name: Comment Connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.4
+Version: 1.5
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
@@ -49,7 +49,7 @@ if ($blank > 0)
 	//this is the big change
 	//determine all occurances of @ and their following authors
 	//then loads into array
-	preg_match_all("/@(.*)(:|\<br \/\>)/", $comment, $out);
+	preg_match_all("/@(.*)(:|\<br \/\>|,)/", $comment, $out);
 
 	for ($x=0; $x < count($out[1]); $x++) {
 		//solves little problem with colon usage

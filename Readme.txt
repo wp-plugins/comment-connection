@@ -3,7 +3,7 @@ Contributors: wesg
 Tags: comments,link,reply
 Requires at least: 2.0
 Tested up to: 2.5
-Stable tag: 1.4
+Stable tag: 1.5
 
 Comment Connection is a Wordpress plugin that automatically links comments as authors reply to each other.
 
@@ -17,9 +17,11 @@ If the type after the @ symbol does not correspond to a comment, no changes are 
 
 Currently tested successfully with WP 2.5. If you have trouble with earlier versions, or even have it work properly on earlier versions, please let me know.
 
+For a complete list of the changes from each version, please visit <a href="http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/#changelog">the plugin homepage</a>.
+
 = USAGE =
 
-Inside a comment, write @*commenter* where *commenter* is the name of the author you are replying to. This can happen anywhere in the comment, so long as there is a new line or : after the reference.
+Inside a comment, write @*commenter* where *commenter* is the name of the author you are replying to. The plugin will successfully find a link when the commenter text is followed by a new line, colon (:) or comma (,).
 
 = LIMITATIONS =
 
