@@ -2,8 +2,8 @@
 Contributors: wesg
 Tags: comments,link,reply
 Requires at least: 2.0
-Tested up to: 2.5
-Stable tag: 1.5
+Tested up to: 2.6
+Stable tag: 1.5.1
 
 Comment Connection is a Wordpress plugin that automatically links comments as authors reply to each other.
 
@@ -15,9 +15,11 @@ The plugin works by searching each comment for an occurance of @. Where it finds
 
 If the type after the @ symbol does not correspond to a comment, no changes are made.
 
-Currently tested successfully with WP 2.5. If you have trouble with earlier versions, or even have it work properly on earlier versions, please let me know.
+Currently tested successfully with the most current version of WP, 2.6. If you have trouble with earlier versions, or even have it work properly on earlier versions, please let me know.
 
 For a complete list of the changes from each version, please visit <a href="http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/#changelog">the plugin homepage</a>.
+
+Be sure to check out my other plugins at <a href="http://wordpress.org/extend/plugins/profile/wesg">my Wordpress profile</a>.
 
 = USAGE =
 
@@ -47,4 +49,8 @@ The @ symbol currently modifies comments, though more options may become availab
 
 = How does the plugin know when not to add a link? =
 
-In addition to the @ symbol, the reference must be followed by either a new line or semicolon. This means that neither email addresses nor regular names are turned into a link unless it has the @ symbol.
+In addition to the @ symbol, the reference must be followed by either a new line, colon or comma. This means that neither email addresses nor regular names are turned into a link unless it has the @ symbol.
+
+= Will the plugin work if I use a different case? =
+
+Yes. Comment Connection will still find the reference if the case is different. Ex. *@john smith*: will reference the comment by *John Smith*.

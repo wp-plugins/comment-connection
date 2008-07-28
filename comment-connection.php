@@ -3,7 +3,7 @@
 Plugin Name: Comment Connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.5
+Version: 1.5.1
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
@@ -40,41 +40,42 @@ if ($blank > 0)
 
 	if ($count > 0) {
 
-	//find the post ID without printing to screen
-	$pid = get_the_ID();
+		//find the post ID without printing to screen
+		$pid = get_the_ID();
 
-	//find the comment ID without printing to screen
-	$cid = get_comment_ID();
+		//find the comment ID without printing to screen
+		$cid = get_comment_ID();
 	
-	//this is the big change
-	//determine all occurances of @ and their following authors
-	//then loads into array
-	preg_match_all("/@(.*)(:|\<br \/\>|,)/", $comment, $out);
+		//this is the big change
+		//determine all occurances of @ and their following authors
+		//then loads into array
+		preg_match_all("/@(.*)(:|\<br \/\>|,)/", $comment, $out);
 
-	for ($x=0; $x < count($out[1]); $x++) {
-		//solves little problem with colon usage
-		if (substr_count($out[1][$x], ':') > 0) 
-			$out[1][$x] = substr($out[1][$x], 0, strpos($out[1][$x], ':'));
-		//solves other little problem with extra spaces
-		if (substr_count($out[1][$x], ' ') <= 2)
-			$array[$x] = $out[1][$x];
+		foreach ($out[1] as $ref) {
+			//solves little problem with colon usage
+			if (substr_count($ref, ':') > 0) 
+				$ref = substr($ref, 0, strpos($ref, ':'));
+			//solves other little problem with extra spaces
+			if (substr_count($ref, ' ') <= 2)
+				$array[$x] = $ref;
 
-		//retrieve comment info from database
-		$d = db_query($pid, $cid, $array[$x]);
+			//retrieve comment info from database
+			$d = db_query($pid, $cid, $array[$x]);
 
-		//replace the authors with their comment IDs
-		if ($d != NULL)
-			$comment = str_ireplace('@' . $array[$x], '@<a href=#comment-' . $d . '>' . $array[$x] . '</a>', $comment);
+			//replace the authors with their comment IDs
+			//don't worry, that extra i there isn't a spelling mistake
+			//it simply means that references with the wrong case are still replaced
+			if ($d != NULL)
+				$comment = str_ireplace('@' . $array[$x], '@<a href=#comment-' . $d . '>' . $array[$x] . '</a>', $comment);
 	}
 }
-
 return $comment; //print the modified comments
 }
 
 function db_query($pid, $cid, $string) {
 	global $wpdb;
+	//do the database query
 	$result = $wpdb->get_var("SELECT comment_ID FROM $wpdb->comments WHERE comment_author = '$string' AND comment_post_ID = '$pid' AND comment_ID < '$cid' ORDER BY comment_date DESC LIMIT 1");
-
 	return $result;
 }
 
