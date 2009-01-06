@@ -3,7 +3,7 @@
 Plugin Name: Comment Connection
 Plugin URI: http://www.wesg.ca/2008/04/wordpress-plugin-comment-connection/
 Description: Link comments referencing one another automatically.
-Version: 1.5.1
+Version: 1.6
 Author: Wes Goodhoofd
 Author URI: http://www.wesg.ca/
 
@@ -49,7 +49,7 @@ if ($blank > 0)
 		//this is the big change
 		//determine all occurances of @ and their following authors
 		//then loads into array
-		preg_match_all("/@(.*)(:|\<br \/\>|,)/", $comment, $out);
+		preg_match_all("/@(.*)(:|\<br \/\>|,|-)/", $comment, $out);
 
 		foreach ($out[1] as $ref) {
 			//solves little problem with colon usage
@@ -65,8 +65,10 @@ if ($blank > 0)
 			//replace the authors with their comment IDs
 			//don't worry, that extra i there isn't a spelling mistake
 			//it simply means that references with the wrong case are still replaced
-			if ($d != NULL)
-				$comment = str_ireplace('@' . $array[$x], '@<a href=#comment-' . $d . '>' . $array[$x] . '</a>', $comment);
+			if ($d != NULL) {
+				$replacement = preg_replace('/\s$/', '', $array[$x]);
+				$comment = str_ireplace('@' . $replacement, '@<a href=#comment-' . $d . '>' . $replacement . '</a>', $comment);
+		}
 	}
 }
 return $comment; //print the modified comments
